@@ -7,13 +7,12 @@ import { Table, TableCell, TableRow, TableBody, TableHead } from "@material-ui/c
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardAvatar from "components/Card/CardAvatar.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
+import gql from "graphql-tag";
+import { Query } from "react-apollo/index";
 
 const styles = {
   cardCategoryWhite: {
@@ -34,18 +33,50 @@ const styles = {
   }
 };
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+const GET_COLLECTIONS = gql`
+  {
+    getCollections(count: 10) {
+      id
+      owner {
+        name
+      }
+      name
+      description
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
-const rows = [
-  createData('Blocky Chess', 159, 2353, 15.9, "Yesterday"),
-  createData('Mesh Wars', 237, 3011, 37, "2 days ago"),
-  createData('Hash Rush', 262, 750, 24, "a month ago")
-];
+const getMyCollections = (classes, history) => (
+  <Query query={GET_COLLECTIONS}>
+    {({ loading, error, data }) => {
+      if (loading) return "Loading...";
+      if (error) return `Error! ${error.message}`;
+
+      const rows = [];
+
+      data.getCollections.map(collection => {
+        rows.push(
+          <TableRow key={collection.id}>
+            <TableCell component="th" scope="row">
+              {collection.name}
+            </TableCell>
+            <TableCell align="right">0</TableCell>
+            <TableCell align="right">0</TableCell>
+            <TableCell align="right">0</TableCell>
+            <TableCell align="right">{collection.updatedAt}</TableCell>
+          </TableRow>
+        );
+      });
+
+      return rows;
+    }}
+  </Query>
+);
 
 function MyCollections(props) {
-  const { classes } = props;
+  const { classes, history } = props;
   return (
     <div>
       <GridContainer>
@@ -63,17 +94,7 @@ function MyCollections(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map(row => (
-                    <TableRow key={row.name}>
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
-                    </TableRow>
-                  ))}
+                  {getMyCollections(classes, history)}
                 </TableBody>
               </Table>
             </CardBody>

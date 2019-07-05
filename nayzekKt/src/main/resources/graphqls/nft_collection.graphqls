@@ -1,0 +1,16 @@
+type Collection {
+    id: String!
+    name: String!
+    owner: User!
+    description: String!
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+extend type Mutation {
+    createCollection(name: String, description: String): Collection!
+}
+
+extend type Query {
+    getCollections(count: Int, offset: Int): [Collection]!
+}

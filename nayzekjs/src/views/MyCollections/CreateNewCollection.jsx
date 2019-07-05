@@ -12,6 +12,8 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import {InputAdornment} from "@material-ui/core";
 import CustomInput from "components/CustomInput/CustomInput";
+import {apolloClient} from "util/index";
+import gql from "graphql-tag";
 
 const style = {
     label: {
@@ -21,6 +23,16 @@ const style = {
         marginTop: "0.5rem"
     }
 };
+
+const CREATE_NEW_COLLECTION = gql`
+    mutation CreateCollection($name: String!, $description: String!) {
+        createCollection(name: $name, description: $description) {
+            id
+            name
+            description
+        }
+    }
+`;
 
 class CreateNewCollection extends React.Component {
 
@@ -32,6 +44,19 @@ class CreateNewCollection extends React.Component {
     handleSimple = event => {
         this.setState({[event.target.name]: event.target.value});
     };
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        
+        apolloClient
+                        .mutate({
+                            variables: {name: this.state.name, description: this.state.description},
+                            mutation: CREATE_NEW_COLLECTION
+                        })
+                        .then(response => {
+                            this.props.history.push("/my_collections")
+                        });
+    }
 
     render() {
         const {classes} = this.props;

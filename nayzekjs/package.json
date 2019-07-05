@@ -1,7 +1,7 @@
 {
-  "name": "material-dashboard-react",
-  "version": "1.7.0",
-  "description": "Material Dashboard React. Coded by Creative Tim",
+  "name": "nayzek",
+  "version": "0.1.0",
+  "description": "Nft management and minting tool.",
   "private": false,
   "main": "dist/index.js",
   "dependencies": {
@@ -18,7 +18,11 @@
     "react-google-maps": "9.4.5",
     "react-router-dom": "5.0.1",
     "react-scripts": "3.0.1",
-    "react-swipeable-views": "0.13.3"
+    "react-swipeable-views": "0.13.3",
+    "graphql": "^14.2.1",
+    "graphql-tag": "^2.10.1",
+    "apollo-boost": "^0.3.1",
+    "react-apollo": "^2.5.5"
   },
   "scripts": {
     "start": "react-scripts start",

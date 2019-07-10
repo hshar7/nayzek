@@ -1,0 +1,21 @@
+enum NFT_TYPE {
+    ERC_721,
+    ERC_1155
+}
+
+type NftTemplate {
+    id: String,
+    type: NFT_TYPE,
+    creator: User,
+    collection: NftCollection,
+    name: String,
+    description: String,
+    createdAt: Date,
+    updatedAt: Date
+}
+
+extend type Query {
+    templates(count: Int, offset: Int): [NftTemplate]!
+    templatesByCollection(nftCollectionId: String, count: Int, offset: Int): [NftTemplate]!
+    template(id: String): NftTemplate
+}

@@ -1,4 +1,4 @@
-type Collection {
+type NftCollection {
     id: String!
     name: String!
     owner: User!
@@ -8,9 +8,10 @@ type Collection {
 }
 
 extend type Mutation {
-    createCollection(name: String, description: String): Collection!
+    createCollection(name: String, description: String): NftCollection!
 }
 
 extend type Query {
-    getCollections(count: Int, offset: Int): [Collection]!
+    getCollections(count: Int, offset: Int): [NftCollection]!
+    collection(id: String): NftCollection
 }

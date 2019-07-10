@@ -1,6 +1,6 @@
 enum NFT_TYPE {
-    ERC_721,
-    ERC_1155
+    ERC721,
+    ERC1155
 }
 
 type NftTemplate {
@@ -18,4 +18,8 @@ extend type Query {
     templates(count: Int, offset: Int): [NftTemplate]!
     templatesByCollection(nftCollectionId: String, count: Int, offset: Int): [NftTemplate]!
     template(id: String): NftTemplate
+}
+
+extend type Mutation {
+    createTemplate(type: NFT_TYPE, nftCollectionId: String, name: String, description: String): NftTemplate
 }

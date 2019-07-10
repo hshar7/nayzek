@@ -1,0 +1,18 @@
+type nft {
+    id: String
+    contract: String
+    value: BigDecimal
+    type: NFT_TYPE
+    minter: User
+    collection: NftCollection
+    ownerAddress: String
+    name: String
+    description: String
+    createdAt: Date
+    updatedAt: Date
+}
+
+extend type Query {
+    nfts(templateId: String): [nft]!
+    nft(nftId: String): nft!
+}

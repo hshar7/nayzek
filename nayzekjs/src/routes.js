@@ -9,6 +9,7 @@ import TableList from "views/TableList/TableList.jsx";
 import Typography from "views/Typography/Typography.jsx";
 import Collection from "views/Collection/Collection.jsx";
 import CreateNewCollection from "views/MyCollections/CreateNewCollection";
+import CreateNewTemplate from "views/Template/CreateNewTemplate";
 
 const dashboardRoutes = [
   {
@@ -28,12 +29,13 @@ const dashboardRoutes = [
     layout: "/"
   },
   {
-    path: "/collection/:id",
+    path: "/collection/:id/details",
     name: "Collection",
     rtlName: "",
     icon: Person,
     component: Collection,
-    layout: "/"
+    layout: "/",
+    visible: false
   },
   {
     path: "/create_new_collection",
@@ -41,7 +43,8 @@ const dashboardRoutes = [
     rtlName: "",
     icon: Person,
     component: CreateNewCollection,
-    layout: "/"
+    layout: "/",
+    visible: false
   },
   {
     path: "/my_templates",
@@ -52,13 +55,40 @@ const dashboardRoutes = [
     layout: "/"
   },
   {
+    path: "/collection/:id/create_new_template",
+    name: "Create New Template",
+    rtlName: "",
+    icon: Person,
+    component: CreateNewTemplate,
+    layout: "/",
+    visible: false
+  },
+  {
+    path: "/template/:id/details",
+    name: "Template",
+    rtlName: "",
+    icon: Person,
+    component: Collection,
+    layout: "/",
+    visible: false
+  },
+  {
     path: "/my_nfts",
     name: "My NFTs",
     rtlName: "",
     icon: LibraryBooks,
     component: Typography,
     layout: "/"
-  }
+  },
+  {
+    path: "/create_new_nft",
+    name: "Create New NFT",
+    rtlName: "",
+    icon: Person,
+    component: CreateNewCollection,
+    layout: "/",
+    visible: false
+  },
 ];
 
 export default dashboardRoutes;

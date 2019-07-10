@@ -12,7 +12,7 @@ import { Query } from "react-apollo/index";
 
 const style = {};
 
-const GET_COLLECTION = id => gql`{
+const GET_TEMPLATE = id => gql`{
     collection(id: "${id}") {
       id
       owner {
@@ -25,8 +25,8 @@ const GET_COLLECTION = id => gql`{
     }
 }`;
 
-const GET_COLLECTION_TEMPLATES = id => gql`{
-    templatesByCollection(nftCollectionId: "${id}", count: 10) {
+const GET_MINTS = id => gql`{
+    nfts(templateId: "${id}", count: 10) {
         id,
         type,
         creator {
@@ -85,7 +85,7 @@ const getCollectionTemplates = (classes, history, id) => (
     </Query>
 );
 
-function Collection(props) {
+function Template(props) {
     const { classes, history, match } = props;
 
     return (
@@ -94,25 +94,26 @@ function Collection(props) {
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
                         <CardBody>
-                            {getCollection(classes, match.params.id)}
+                            {getTemplate(classes, match.params.id)}
 
                             <Table className={classes.table}>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Template</TableCell>
-                                        <TableCell align="right">type</TableCell>
-                                        <TableCell align="right">?</TableCell>
+                                        <TableCell>NFT</TableCell>
+                                        <TableCell align="right">Type</TableCell>
+                                        <TableCell align="right">Minted By</TableCell>
+                                        <TableCell align="right">Current Owner</TableCell>
                                         <TableCell align="right">Value&nbsp;(Ξ)</TableCell>
-                                        <TableCell align="right">Last Updated</TableCell>
+                                        <TableCell align="right">Minted On</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {getCollectionTemplates(classes, history, match.params.id)}
+                                    {getNfts(classes, history, match.params.id)}
                                 </TableBody>
                             </Table>
                         </CardBody>
                         <CardFooter>
-                            <Button color="primary" onClick={() => props.history.push("/collection/" + match.params.id + "/create_new_template")}>Create New Template</Button>
+                            <Button color="primary" onClick={() => props.history.push("/collection/" + match.params.id + "/create_new_template")}>Mint New</Button>
                         </CardFooter>
                     </Card>
                 </GridItem>
@@ -125,4 +126,4 @@ Collection.propTypes = {
     classes: PropTypes.object
 };
 
-export default withStyles(style)(Collection);
+export default withStyles(style)(Template);

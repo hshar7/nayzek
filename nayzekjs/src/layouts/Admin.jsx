@@ -94,10 +94,12 @@ class Dashboard extends React.Component {
   }
   render() {
     const { classes, ...rest } = this.props;
+    const sidebarRoutes = routes.filter(x => x.visible !== false);
+
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={routes}
+          routes={sidebarRoutes}
           logoText={"Nayzek"}
           logo={logo}
           image={this.state.image}
@@ -108,7 +110,7 @@ class Dashboard extends React.Component {
         />
         <div className={classes.mainPanel} ref={this.mainPanel}>
           <Navbar
-            routes={routes}
+            routes={sidebarRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             {...rest}
           />

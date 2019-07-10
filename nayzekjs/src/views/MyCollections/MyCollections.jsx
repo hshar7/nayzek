@@ -58,7 +58,7 @@ const getMyCollections = (classes, history) => (
 
       data.getCollections.map(collection => {
         rows.push(
-          <TableRow key={collection.id}>
+          <TableRow key={collection.id} onClick={() => history.push("/collection/" + collection.id)}>
             <TableCell component="th" scope="row">
               {collection.name}
             </TableCell>

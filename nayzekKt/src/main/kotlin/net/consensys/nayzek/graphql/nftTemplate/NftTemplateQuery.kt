@@ -48,4 +48,3 @@ class NftTemplateQuery @Autowired constructor(
         return nftTemplateRepository.findOne(id) ?: throw Exception("Template $id not found.")
     }
 }
-    

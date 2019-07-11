@@ -11,7 +11,7 @@ data class Nft (
         val value: BigDecimal,
         val type: NFT_TYPE,
         @DBRef val minter: User,
-        val collection: NftCollection,
+        val template: NftTemplate,
         var ownerAddress: String,
         val name: String,
         val description: String,

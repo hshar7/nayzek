@@ -13,27 +13,16 @@ import { Query } from "react-apollo/index";
 const style = {};
 
 const GET_TEMPLATE = id => gql`{
-    collection(id: "${id}") {
-      id
-      owner {
-        name
-      }
-      name
-      description
-      createdAt
-      updatedAt
-    }
-}`;
-
-const GET_MINTS = id => gql`{
-    nfts(templateId: "${id}", count: 10) {
-        id,
-        type,
+    template(id: "${id}") {
+        id
+        type
         creator {
             id
             name
-            email
-            publicAddress
+        }
+        collection {
+            id
+            name
         }
         name
         description
@@ -42,15 +31,37 @@ const GET_MINTS = id => gql`{
     }
 }`;
 
-const getCollection = (classes, id) => (
-    <Query query={GET_COLLECTION(id)}>
+const GET_MINTS = id => gql`{
+    nftsByTemplate(templateId: "${id}", count: 10) {
+        id
+        contract
+        value
+        type
+        minter {
+            id
+            name
+        }
+        template {
+            id
+            name
+        }
+        ownerAddress
+        name
+        description
+        createdAt
+        updatedAt
+    }
+}`;
+
+const getTemplate = (classes, id) => (
+    <Query query={GET_TEMPLATE(id)}>
         {({ loading, error, data }) => {
             if (loading) return "Loading...";
             if (error) return `Error! ${error.message}`;
 
             const head = <div>
-                <h3>Template: <b>{data.collection.name}</b></h3>
-                <h5>{data.collection.description}</h5>
+                <h3>Template: <b>{data.template.name}</b></h3>
+                <h5>{data.template.description}</h5>
             </div>;
 
             return head;
@@ -58,24 +69,25 @@ const getCollection = (classes, id) => (
     </Query>
 );
 
-const getCollectionTemplates = (classes, history, id) => (
-    <Query query={GET_COLLECTION_TEMPLATES(id)}>
+const getNfts = (classes, history, id) => (
+    <Query query={GET_MINTS(id)}>
         {({ loading, error, data }) => {
             if (loading) return "Loading...";
             if (error) return `Error! ${error.message}`;
 
             const rows = [];
 
-            data.templatesByCollection.map(template => {
+            data.nftsByTemplate.map(nft => {
                 rows.push(
-                    <TableRow key={template.id} onClick={() => history.push("/template/" + template.id + "/details")}>
+                    <TableRow key={nft.id} onClick={() => history.push("/template/" + nft.id + "/details")}>
                         <TableCell component="th" scope="row">
-                            {template.name}
+                            {nft.name}
                         </TableCell>
-                        <TableCell align="right">{template.type}</TableCell>
-                        <TableCell align="right">0</TableCell>
-                        <TableCell align="right">0</TableCell>
-                        <TableCell align="right">{template.updatedAt}</TableCell>
+                        <TableCell align="right">{nft.type}</TableCell>
+                        <TableCell align="right">{nft.minter.name}</TableCell>
+                        <TableCell align="right">{nft.ownerAddress}</TableCell>
+                        <TableCell align="right">{nft.value}</TableCell>
+                        <TableCell align="right">{nft.createdAt}</TableCell>
                     </TableRow>
                 );
             });
@@ -122,7 +134,7 @@ function Template(props) {
     );
 }
 
-Collection.propTypes = {
+Template.propTypes = {
     classes: PropTypes.object
 };
 

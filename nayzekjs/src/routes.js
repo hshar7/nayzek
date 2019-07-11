@@ -10,6 +10,7 @@ import Typography from "views/Typography/Typography.jsx";
 import Collection from "views/Collection/Collection.jsx";
 import CreateNewCollection from "views/MyCollections/CreateNewCollection";
 import CreateNewTemplate from "views/Template/CreateNewTemplate";
+import Template from "views/Template/Template";
 
 const dashboardRoutes = [
   {
@@ -68,7 +69,7 @@ const dashboardRoutes = [
     name: "Template",
     rtlName: "",
     icon: Person,
-    component: Collection,
+    component: Template,
     layout: "/",
     visible: false
   },

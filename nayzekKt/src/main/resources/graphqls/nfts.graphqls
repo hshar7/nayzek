@@ -4,7 +4,7 @@ type nft {
     value: BigDecimal
     type: NFT_TYPE
     minter: User
-    collection: NftCollection
+    template: NftTemplate
     ownerAddress: String
     name: String
     description: String
@@ -13,6 +13,7 @@ type nft {
 }
 
 extend type Query {
-    nfts(templateId: String): [nft]!
+    nfts(count: Int, offset: Int): [nft]!
+    nftsByTemplate(templateId: String, count: Int, offset: Int): [nft]!
     nft(nftId: String): nft!
 }

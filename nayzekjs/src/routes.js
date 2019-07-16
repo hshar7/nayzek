@@ -11,6 +11,8 @@ import Collection from "views/Collection/Collection.jsx";
 import CreateNewCollection from "views/MyCollections/CreateNewCollection";
 import CreateNewTemplate from "views/Template/CreateNewTemplate";
 import Template from "views/Template/Template";
+import MyTemplates from "views/Template/MyTemplates";
+import MyNfts from "views/Nft/MyNfts";
 
 const dashboardRoutes = [
   {
@@ -52,7 +54,7 @@ const dashboardRoutes = [
     name: "My Templates",
     rtlName: "",
     icon: "content_paste",
-    component: TableList,
+    component: MyTemplates,
     layout: "/"
   },
   {
@@ -78,7 +80,7 @@ const dashboardRoutes = [
     name: "My NFTs",
     rtlName: "",
     icon: LibraryBooks,
-    component: Typography,
+    component: MyNfts,
     layout: "/"
   },
   {

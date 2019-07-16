@@ -20,14 +20,22 @@ import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
+import assist from "bnc-assist";
+import Web3 from "web3";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
 
 class AdminNavbarLinks extends React.Component {
   state = {
     openNotifcation: false,
-    openProfile: false
+    openProfile: false,
+    web3: null
   };
+
+  componentDidMount = () => {
+    this.setState({ web3: new Web3(window.web3.currentProvider) });
+  }
+
   handleToggleNotification = () => {
     this.setState(state => ({ openNotifcation: !state.openNotifcation }));
   };
@@ -37,8 +45,20 @@ class AdminNavbarLinks extends React.Component {
     }
     this.setState({ openNotifcation: false });
   };
+
   handleToggleProfile = () => {
-    this.setState(state => ({ openProfile: !state.openProfile }));
+    let bncAssistConfig = {
+      dappId: "cae96417-0f06-4935-864d-2d5f99e7d40f",
+      networkId: 4,
+      web3: this.state.web3
+    };
+
+
+    this.setState({ assistInstance: assist.init(bncAssistConfig) }, () => {
+      this.state.assistInstance.onboard();
+    });
+
+    // this.setState(state => ({ openProfile: !state.openProfile }));
   };
   handleCloseProfile = event => {
     if (this.anchorProfile.contains(event.target)) {
@@ -198,7 +218,7 @@ class AdminNavbarLinks extends React.Component {
                     placement === "bottom" ? "center top" : "center bottom"
                 }}
               >
-                <Paper>
+                {/* <Paper>
                   <ClickAwayListener onClickAway={this.handleCloseProfile}>
                     <MenuList role="menu">
                       <MenuItem
@@ -222,7 +242,7 @@ class AdminNavbarLinks extends React.Component {
                       </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
-                </Paper>
+                </Paper> */}
               </Grow>
             )}
           </Poppers>

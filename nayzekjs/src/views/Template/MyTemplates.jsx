@@ -12,23 +12,14 @@ import { Query } from "react-apollo/index";
 
 const style = {};
 
-const GET_COLLECTION = id => gql`{
-    collection(id: "${id}") {
-      id
-      owner {
-        name
-      }
-      name
-      description
-      createdAt
-      updatedAt
-    }
-}`;
-
-const GET_COLLECTION_TEMPLATES = id => gql`{
-    templatesByCollection(nftCollectionId: "${id}", count: 10) {
-        id,
-        type,
+const GET_MY_TEMPLATES = gql`{
+    templates(count: 100) {
+        id
+        type
+        collection {
+            id
+            name
+        }
         creator {
             id
             name
@@ -42,40 +33,24 @@ const GET_COLLECTION_TEMPLATES = id => gql`{
     }
 }`;
 
-const getCollection = (classes, id) => (
-    <Query query={GET_COLLECTION(id)}>
-        {({ loading, error, data }) => {
-            if (loading) return "Loading...";
-            if (error) return `Error! ${error.message}`;
-
-            const head = <div>
-                <h3>Collection: <b>{data.collection.name}</b></h3>
-                <h5>{data.collection.description}</h5>
-            </div>;
-
-            return head;
-        }}
-    </Query>
-);
-
-const getCollectionTemplates = (classes, history, id) => (
-    <Query query={GET_COLLECTION_TEMPLATES(id)}>
+const getMyTemplates = (classes, history, id) => (
+    <Query query={GET_MY_TEMPLATES}>
         {({ loading, error, data }) => {
             if (loading) return "Loading...";
             if (error) return `Error! ${error.message}`;
 
             const rows = [];
 
-            data.templatesByCollection.map(template => {
+            data.templates.map(template => {
                 rows.push(
                     <TableRow key={template.id} onClick={() => history.push("/template/" + template.id + "/details")}>
                         <TableCell component="th" scope="row">
                             {template.name}
                         </TableCell>
                         <TableCell align="right">{template.type}</TableCell>
+                        <TableCell align="right">{template.collection.name}</TableCell>
                         <TableCell align="right">0</TableCell>
-                        <TableCell align="right">0</TableCell>
-                        <TableCell align="right">{template.updatedAt}</TableCell>
+                        <TableCell align="right">{template.createdAt}</TableCell>
                     </TableRow>
                 );
             });
@@ -94,26 +69,21 @@ function Collection(props) {
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
                         <CardBody>
-                            {getCollection(classes, match.params.id)}
-
                             <Table className={classes.table}>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Template</TableCell>
                                         <TableCell align="right">type</TableCell>
-                                        <TableCell align="right">?</TableCell>
+                                        <TableCell align="right">Collection</TableCell>
                                         <TableCell align="right">Value&nbsp;(Ξ)</TableCell>
-                                        <TableCell align="right">Last Updated</TableCell>
+                                        <TableCell align="right">Created At</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {getCollectionTemplates(classes, history, match.params.id)}
+                                    {getMyTemplates(classes, history)}
                                 </TableBody>
                             </Table>
                         </CardBody>
-                        <CardFooter>
-                            <Button color="primary" onClick={() => props.history.push("/collection/" + match.params.id + "/create_new_template")}>Create New Template</Button>
-                        </CardFooter>
                     </Card>
                 </GridItem>
             </GridContainer>

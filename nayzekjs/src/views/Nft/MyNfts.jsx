@@ -12,27 +12,8 @@ import { Query } from "react-apollo/index";
 
 const style = {};
 
-const GET_TEMPLATE = id => gql`{
-    template(id: "${id}") {
-        id
-        type
-        creator {
-            id
-            name
-        }
-        collection {
-            id
-            name
-        }
-        name
-        description
-        createdAt
-        updatedAt
-    }
-}`;
-
-const GET_MINTS = id => gql`{
-    nftsByTemplate(templateId: "${id}", count: 10) {
+const GET_NFTS = gql`{
+    nfts(count: 100) {
         id
         contract
         value
@@ -53,36 +34,21 @@ const GET_MINTS = id => gql`{
     }
 }`;
 
-const getTemplate = (classes, id) => (
-    <Query query={GET_TEMPLATE(id)}>
-        {({ loading, error, data }) => {
-            if (loading) return "Loading...";
-            if (error) return `Error! ${error.message}`;
-
-            const head = <div>
-                <h3>Template: <b>{data.template.name}</b></h3>
-                <h5>{data.template.description}</h5>
-            </div>;
-
-            return head;
-        }}
-    </Query>
-);
-
-const getNfts = (classes, history, id) => (
-    <Query query={GET_MINTS(id)}>
+const getNfts = (classes, history) => (
+    <Query query={GET_NFTS}>
         {({ loading, error, data }) => {
             if (loading) return "Loading...";
             if (error) return `Error! ${error.message}`;
 
             const rows = [];
 
-            data.nftsByTemplate.map(nft => {
+            data.nfts.map(nft => {
                 rows.push(
                     <TableRow key={nft.id} onClick={() => history.push("/nft/" + nft.id + "/details")}>
                         <TableCell component="th" scope="row">
                             {nft.name}
                         </TableCell>
+                        <TableCell align="right">{nft.template.name}</TableCell>
                         <TableCell align="right">{nft.type}</TableCell>
                         <TableCell align="right">{nft.minter.name}</TableCell>
                         <TableCell align="right">{nft.ownerAddress}</TableCell>
@@ -106,12 +72,11 @@ function Template(props) {
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
                         <CardBody>
-                            {getTemplate(classes, match.params.id)}
-
                             <Table className={classes.table}>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>NFT</TableCell>
+                                        <TableCell align="right">Template</TableCell>
                                         <TableCell align="right">Type</TableCell>
                                         <TableCell align="right">Minted By</TableCell>
                                         <TableCell align="right">Current Owner</TableCell>
@@ -120,13 +85,10 @@ function Template(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {getNfts(classes, history, match.params.id)}
+                                    {getNfts(classes, history)}
                                 </TableBody>
                             </Table>
                         </CardBody>
-                        <CardFooter>
-                            <Button color="primary" onClick={() => window.alert("Working on it")}>Mint New</Button>
-                        </CardFooter>
                     </Card>
                 </GridItem>
             </GridContainer>

@@ -5,8 +5,6 @@ import LibraryBooks from "@material-ui/icons/LibraryBooks";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
 import MyCollections from "views/MyCollections/MyCollections.jsx";
-import TableList from "views/TableList/TableList.jsx";
-import Typography from "views/Typography/Typography.jsx";
 import Collection from "views/Collection/Collection.jsx";
 import CreateNewCollection from "views/MyCollections/CreateNewCollection";
 import CreateNewTemplate from "views/Template/CreateNewTemplate";

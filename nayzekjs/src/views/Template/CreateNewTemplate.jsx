@@ -40,7 +40,7 @@ class CreateNewTemplate extends React.Component {
         name: "",
         description: "",
         type: "ERC721"
-    }
+    };
 
     handleSimple = event => {
         this.setState({ [event.target.name]: event.target.value });
@@ -57,7 +57,7 @@ class CreateNewTemplate extends React.Component {
             .then(response => {
                 this.props.history.push("/collection/" + this.props.match.params.id + "/details")
             });
-    }
+    };
 
     render() {
         const { classes } = this.props;

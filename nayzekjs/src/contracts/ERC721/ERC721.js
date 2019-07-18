@@ -1,4 +1,4 @@
-[
+export default [
 	{
 		"constant": false,
 		"inputs": [

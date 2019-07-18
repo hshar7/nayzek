@@ -15,6 +15,7 @@ import Web3 from "web3";
 import assist from "bnc-assist";
 import GridItem from "components/Grid/GridItem";
 import GridContainer from "../../components/Grid/GridContainer";
+import abi from "contracts/ERC721/ERC721.js";
 
 const modalStyle = {
     modal: {
@@ -86,7 +87,8 @@ class MintModal extends React.Component {
         web3: null,
         assistInstance: null,
         name: null,
-        description: null
+        description: null,
+        decoratedContract: null
     };
 
     componentDidMount = () => {
@@ -111,7 +113,23 @@ class MintModal extends React.Component {
     };
 
     mint = () => {
-        this.state.assistInstance.contract(this.state.web3.contract());
+        this.setState({
+            decoratedContract: this.state.assistInstance.Contract(
+                this.state.web3.eth.contract(abi).at("0x9c47f0123D6d13bd8220F88DBe2327fAcc1077b8")
+            )
+        }, () => {
+            this.state.decoratedContract.mintWithTokenURI(
+                "0xB6E58769550608DEF3043DCcbBE1Fa653af23151",
+                10,
+                JSON.stringify({name: this.state.name, description: this.state.description}),
+                {from: "0xB6E58769550608DEF3043DCcbBE1Fa653af23151"},
+                (err, _) => {
+                    if (!err) {
+                        console.log("Contract successful");
+                    }
+                }
+            );
+        });
     };
 
     render = () => {

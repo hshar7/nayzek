@@ -169,6 +169,33 @@ export default [
 		"inputs": [
 			{
 				"indexed": false,
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "minter",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "receiver",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "tokenURI",
+				"type": "string"
+			}
+		],
+		"name": "NewToken",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
 				"name": "_from",
 				"type": "address"
 			},
@@ -404,4 +431,4 @@ export default [
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
+];

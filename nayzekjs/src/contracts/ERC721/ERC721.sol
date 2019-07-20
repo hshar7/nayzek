@@ -590,6 +590,14 @@ contract ERC721BasicTokenMetadata is ERC721BasicToken {
     function mintWithTokenURI(address to, uint256 tokenId, string memory tokenURI) public returns (bool) {
         _mint(to, tokenId);
         _setTokenURI(tokenId, tokenURI);
+
+        emit NewToken(
+            tokenId,
+            msg.sender,
+            to,
+            tokenURI
+        );
+
         return true;
     }
 
@@ -604,4 +612,6 @@ contract ERC721BasicTokenMetadata is ERC721BasicToken {
     function burn(uint256 _tokenId) public {
         super._burn(ownerOf(_tokenId), _tokenId);
     }
+
+    event NewToken(uint256 tokenId, address minter, address receiver, string tokenURI);
 }

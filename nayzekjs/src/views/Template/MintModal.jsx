@@ -91,6 +91,10 @@ class MintModal extends React.Component {
         decoratedContract: null
     };
 
+    handleSimple = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    };
+
     componentDidMount = () => {
         this.setState({web3: new Web3(window.web3.currentProvider)}, () => {
             let bncAssistConfig = {
@@ -115,17 +119,19 @@ class MintModal extends React.Component {
     mint = () => {
         this.setState({
             decoratedContract: this.state.assistInstance.Contract(
-                this.state.web3.eth.contract(abi).at("0x9c47f0123D6d13bd8220F88DBe2327fAcc1077b8")
+                this.state.web3.eth.contract(abi).at("0x1600ce19d19b9d4a39dff664271adcb6bd1bb083")
             )
         }, () => {
             this.state.decoratedContract.mintWithTokenURI(
                 "0xB6E58769550608DEF3043DCcbBE1Fa653af23151",
-                10,
+                5,
                 JSON.stringify({name: this.state.name, description: this.state.description}),
                 {from: "0xB6E58769550608DEF3043DCcbBE1Fa653af23151"},
                 (err, _) => {
                     if (!err) {
                         console.log("Contract successful");
+                    } else {
+                        console.error({err});
                     }
                 }
             );

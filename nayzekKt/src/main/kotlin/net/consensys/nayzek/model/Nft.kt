@@ -8,13 +8,13 @@ import java.util.*
 data class Nft (
         val id: String,
         val contract: String,
+        var tokenId: Int,
         val value: BigDecimal,
         val type: NFT_TYPE,
         @DBRef val minter: User,
         val template: NftTemplate,
         var ownerAddress: String,
-        val name: String,
-        val description: String,
+        val dataJson: String,
         val createdAt: Date,
         var updatedAt: Date
 )

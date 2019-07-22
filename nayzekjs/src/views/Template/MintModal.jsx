@@ -124,7 +124,7 @@ class MintModal extends React.Component {
         }, () => {
             this.state.decoratedContract.mintWithTokenURI(
                 "0xB6E58769550608DEF3043DCcbBE1Fa653af23151",
-                5,
+                7,
                 JSON.stringify({name: this.state.name, description: this.state.description}),
                 {from: "0xB6E58769550608DEF3043DCcbBE1Fa653af23151"},
                 (err, _) => {

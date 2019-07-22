@@ -2,7 +2,6 @@ package net.consensys.nayzek.model.transient
 
 import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
 data class NewTokenMessage (
         val id: String,
         val type: String,
@@ -10,12 +9,11 @@ data class NewTokenMessage (
         val retries: Int
 )
 
-@JsonClass(generateAdapter = true)
 data class NewTokenMessageDetails(
         val name: String,
         val filterId: String,
         val nodeName: String,
-        val indexedParameters: ArrayList<NewTokenMessageDetailsIndexedParams>,
+        val nonIndexedParameters: List<NewTokenMessageDetailsNonIndexedParams>,
         val transactionHash: String,
         val logIndex: Int,
         val blockNumber: Int,
@@ -27,8 +25,7 @@ data class NewTokenMessageDetails(
         val id: String
 )
 
-@JsonClass(generateAdapter = true)
-data class NewTokenMessageDetailsIndexedParams(
+data class NewTokenMessageDetailsNonIndexedParams(
         val type: String,
         val value: String
 )

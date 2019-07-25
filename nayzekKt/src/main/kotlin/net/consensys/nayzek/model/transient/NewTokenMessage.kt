@@ -1,7 +1,5 @@
 package net.consensys.nayzek.model.transient
 
-import com.squareup.moshi.JsonClass
-
 data class NewTokenMessage (
         val id: String,
         val type: String,

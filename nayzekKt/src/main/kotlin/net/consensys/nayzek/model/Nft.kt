@@ -12,7 +12,7 @@ data class Nft (
         val value: BigDecimal,
         val type: NFT_TYPE,
         @DBRef val minter: User,
-        val template: NftTemplate,
+        @DBRef val template: NftTemplate,
         var ownerAddress: String,
         val dataJson: String,
         val createdAt: Date,

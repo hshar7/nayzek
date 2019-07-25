@@ -8,7 +8,7 @@ data class NftTemplate (
         val id: String,
         val type: NFT_TYPE,
         @DBRef val creator: User,
-        val collection: NftCollection,
+        @DBRef val collection: NftCollection,
         var name: String,
         var description: String,
         val createdAt: Date,

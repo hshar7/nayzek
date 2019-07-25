@@ -1,0 +1,3 @@
+extend type Mutation {
+    monitorTx(txHash: String, collectionId: String): Boolean
+}

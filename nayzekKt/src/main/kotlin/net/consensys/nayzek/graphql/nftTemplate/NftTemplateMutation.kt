@@ -3,7 +3,6 @@ package net.consensys.nayzek.graphql.nftTemplate
 import com.coxautodev.graphql.tools.GraphQLMutationResolver
 import findOne
 import net.consensys.nayzek.enumeration.NFT_TYPE
-import net.consensys.nayzek.model.NftCollection
 import net.consensys.nayzek.model.NftTemplate
 import net.consensys.nayzek.model.User
 import net.consensys.nayzek.repository.NftCollectionRepository

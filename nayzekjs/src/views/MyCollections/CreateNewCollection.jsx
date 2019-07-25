@@ -2,16 +2,10 @@ import React from "react";
 import {withStyles} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import Input from "@material-ui/core/Input/index";
-import FormControl from "@material-ui/core/FormControl/index";
-import MenuItem from "@material-ui/core/MenuItem/index";
-import Select from "@material-ui/core/Select/index";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import {InputAdornment} from "@material-ui/core";
-import CustomInput from "components/CustomInput/CustomInput";
 import {apolloClient} from "util/index";
 import gql from "graphql-tag";
 
@@ -56,7 +50,7 @@ class CreateNewCollection extends React.Component {
                         .then(response => {
                             this.props.history.push("/my_collections")
                         });
-    }
+    };
 
     render() {
         const {classes} = this.props;

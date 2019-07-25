@@ -6,8 +6,7 @@ type nft {
     minter: User
     template: NftTemplate
     ownerAddress: String
-    name: String
-    description: String
+    dataJson: String
     createdAt: Date
     updatedAt: Date
 }

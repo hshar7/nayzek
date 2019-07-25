@@ -579,6 +579,8 @@ contract ERC721BasicTokenMetadata is ERC721BasicToken {
 
     mapping(uint256 => string) private _tokenURIs;
 
+    uint256 private tokenCount;
+
     function name() external view returns (string memory) {
         return _name;
     }
@@ -587,12 +589,13 @@ contract ERC721BasicTokenMetadata is ERC721BasicToken {
         return _symbol;
     }
 
-    function mintWithTokenURI(address to, uint256 tokenId, string memory tokenURI) public returns (bool) {
-        _mint(to, tokenId);
-        _setTokenURI(tokenId, tokenURI);
+    function mintWithTokenURI(address to, string memory tokenURI) public returns (bool) {
+        tokenCount++;
+        _mint(to, tokenCount);
+        _setTokenURI(tokenCount, tokenURI);
 
         emit NewToken(
-            tokenId,
+            tokenCount,
             msg.sender,
             to,
             tokenURI
@@ -603,10 +606,6 @@ contract ERC721BasicTokenMetadata is ERC721BasicToken {
 
     function _setTokenURI(uint256 tokenId, string memory uri) internal {
         _tokenURIs[tokenId] = uri;
-    }
-
-    function mint(address _to, uint256 _tokenId) public {
-        super._mint(_to, _tokenId);
     }
 
     function burn(uint256 _tokenId) public {

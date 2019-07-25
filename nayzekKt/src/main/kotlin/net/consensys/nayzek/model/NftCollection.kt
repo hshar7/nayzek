@@ -6,7 +6,9 @@ import java.util.*
 data class NftCollection (
         val id: String,
         @DBRef val owner: User,
-        val contractAddress: String = "0x0",
+        var txHash: String = "0x0",
+        var contractAddress: String = "0x0",
+        var deploymentStatus: String = "NOT_DEPLOYED",
         var name: String,
         var description: String,
         val createdAt: Date,

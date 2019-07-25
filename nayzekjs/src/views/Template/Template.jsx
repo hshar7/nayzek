@@ -48,8 +48,7 @@ const GET_MINTS = id => gql`{
             name
         }
         ownerAddress
-        name
-        description
+        dataJson
         createdAt
         updatedAt
     }
@@ -92,9 +91,6 @@ class Template extends React.Component {
                 data.nftsByTemplate.map(nft => {
                     rows.push(
                         <TableRow key={nft.id} onClick={() => history.push("/nft/" + nft.id + "/details")}>
-                            <TableCell component="th" scope="row">
-                                {nft.name}
-                            </TableCell>
                             <TableCell align="right">{nft.type}</TableCell>
                             <TableCell align="right">{nft.minter.name}</TableCell>
                             <TableCell align="right">{nft.ownerAddress}</TableCell>
@@ -127,8 +123,7 @@ class Template extends React.Component {
                                 <Table className={classes.table}>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>NFT</TableCell>
-                                            <TableCell align="right">Type</TableCell>
+                                            <TableCell>Type</TableCell>
                                             <TableCell align="right">Minted By</TableCell>
                                             <TableCell align="right">Current Owner</TableCell>
                                             <TableCell align="right">Value&nbsp;(Ξ)</TableCell>

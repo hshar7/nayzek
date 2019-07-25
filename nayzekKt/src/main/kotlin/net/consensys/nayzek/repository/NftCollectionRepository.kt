@@ -8,4 +8,5 @@ import org.springframework.data.mongodb.repository.MongoRepository
 
 interface NftCollectionRepository : MongoRepository<NftCollection, String> {
     fun findByOwner(user: User, pr: PageRequest): Page<NftCollection>
+    fun findByTxHash(txHash: String): NftCollection?
 }

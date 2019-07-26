@@ -1,4 +1,4 @@
-pragma solidity 0.5.0;
+pragma solidity 0.5.10;
 
 /**
  * @title SafeMath
@@ -589,7 +589,7 @@ contract ERC721BasicTokenMetadata is ERC721BasicToken {
         return _symbol;
     }
 
-    function mintWithTokenURI(address to, string memory tokenURI) public returns (bool) {
+    function mintWithTokenURI(address to, string memory tokenURI, string memory templateId) public returns (bool) {
         tokenCount++;
         _mint(to, tokenCount);
         _setTokenURI(tokenCount, tokenURI);
@@ -598,7 +598,8 @@ contract ERC721BasicTokenMetadata is ERC721BasicToken {
             tokenCount,
             msg.sender,
             to,
-            tokenURI
+            tokenURI,
+            templateId
         );
 
         return true;
@@ -612,5 +613,5 @@ contract ERC721BasicTokenMetadata is ERC721BasicToken {
         super._burn(ownerOf(_tokenId), _tokenId);
     }
 
-    event NewToken(uint256 tokenId, address minter, address receiver, string tokenURI);
+    event NewToken(uint256 tokenId, address minter, address receiver, string tokenURI, string templateId);
 }

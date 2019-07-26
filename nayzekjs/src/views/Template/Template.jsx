@@ -25,6 +25,8 @@ const GET_TEMPLATE = id => gql`{
         collection {
             id
             name
+            contractAddress
+            deploymentStatus
         }
         name
         description
@@ -91,7 +93,7 @@ class Template extends React.Component {
                 data.nftsByTemplate.map(nft => {
                     rows.push(
                         <TableRow key={nft.id} onClick={() => history.push("/nft/" + nft.id + "/details")}>
-                            <TableCell align="right">{nft.type}</TableCell>
+                            <TableCell>{nft.type}</TableCell>
                             <TableCell align="right">{nft.minter.name}</TableCell>
                             <TableCell align="right">{nft.ownerAddress}</TableCell>
                             <TableCell align="right">{nft.value}</TableCell>

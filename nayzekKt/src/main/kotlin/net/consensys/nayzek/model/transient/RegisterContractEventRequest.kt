@@ -13,7 +13,8 @@ data class EventSpecification(
                 NonIndexedParameterDefinitions(0, "UINT256"),
                 NonIndexedParameterDefinitions(1, "ADDRESS"),
                 NonIndexedParameterDefinitions(2, "ADDRESS"),
-                NonIndexedParameterDefinitions(3, "STRING")
+                NonIndexedParameterDefinitions(3, "STRING"),
+                NonIndexedParameterDefinitions(4, "STRING")
         )
 )
 

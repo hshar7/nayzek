@@ -5,6 +5,7 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import findOne
 import net.consensys.nayzek.enumeration.NFT_TYPE
 import net.consensys.nayzek.model.Nft
 import net.consensys.nayzek.model.User
@@ -13,6 +14,7 @@ import net.consensys.nayzek.repository.NftRepository
 import net.consensys.nayzek.repository.NftTemplateRepository
 import net.consensys.nayzek.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
+import java.lang.Exception
 import java.util.*
 
 @Service
@@ -32,6 +34,10 @@ class EventListenerService @Autowired constructor(
                         publicAddress = newTokenMessage.details.nonIndexedParameters[1].value,
                         createdAt = Date()
                 ))
+
+        val template = nftTemplateRepository.findOne(newTokenMessage.details.nonIndexedParameters[3].value) ?:
+                throw Exception("Template not found ${newTokenMessage.details.nonIndexedParameters[3].value}")
+
         nftRepository.insert(Nft(
                 id = UUID.randomUUID().toString(),
                 contract = newTokenMessage.details.address,
@@ -39,7 +45,7 @@ class EventListenerService @Autowired constructor(
                 tokenId = newTokenMessage.details.nonIndexedParameters[0].value.toInt(),
                 type = NFT_TYPE.ERC721,
                 minter = minter,
-                template = nftTemplateRepository.findAll()[0],
+                template = template,
                 ownerAddress = newTokenMessage.details.nonIndexedParameters[1].value,
                 dataJson = newTokenMessage.details.nonIndexedParameters[3].value,
                 createdAt = Date(),

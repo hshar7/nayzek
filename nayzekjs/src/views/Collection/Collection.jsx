@@ -10,8 +10,11 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import gql from "graphql-tag";
 import {Query} from "react-apollo/index";
 import abi from "contracts/ERC721/ERC721.js";
-import Web3 from "web3";
+import byte_code from "contracts/ERC721/ERC721Bc.js";
+import {ethers} from 'ethers';
 import {apolloClient} from "../../util";
+import assist from "bnc-assist";
+import Web3 from "web3";
 
 const style = {};
 
@@ -48,8 +51,8 @@ const GET_COLLECTION_TEMPLATES = id => gql`{
 }`;
 
 const MONITOR_TX = gql`
-    mutation MonitorTx($txHash: String!, $collectionId: String!) {
-        monitorTx(txHash: $txHash, collectionId: $collectionId)
+    mutation MonitorTx($txHash: String!, $contractAddress: String!, $collectionId: String!) {
+        monitorTx(txHash: $txHash, contractAddress: $contractAddress collectionId: $collectionId)
     }
 `;
 
@@ -86,11 +89,32 @@ class Collection extends React.Component {
         web3: null,
         assistInstance: null,
         transaction_id: null,
-        collection: null
+        collection: null,
+        decoratedContract: null
     };
 
     componentDidMount = () => {
-        this.setState({web3: new Web3(window.web3.currentProvider)});
+        let bncAssistConfig = {
+            dappId: "cae96417-0f06-4935-864d-2d5f99e7d40f",
+            networkId: 4,
+            web3: new Web3(window.web3.currentProvider),
+            ethers: ethers
+        };
+        //
+        // this.setState({ assistInstance: assist.init(bncAssistConfig) }, () => {
+        //     this.state.assistInstance.onboard();
+        // });
+        // this.setState({web3: new ethers.providers.Web3Provider(window.web3.currentProvider)}, () => {
+        //     let bncAssistConfig = {
+        //         dappId: "cae96417-0f06-4935-864d-2d5f99e7d40f",
+        //         networkId: 4,
+        //         web3: this.state.web3
+        //     };
+        //
+        //     this.setState({assistInstance: assist.init(bncAssistConfig)}, () => {
+        //         this.state.assistInstance.onboard();
+        //     });
+        // });
         apolloClient.query({
             query: GET_COLLECTION(this.props.match.params.id)
         }).then((response) => {
@@ -99,19 +123,63 @@ class Collection extends React.Component {
     };
 
     handleDeploy = () => {
-        this.state.web3.eth.contract(abi).new({from: "0xB6E58769550608DEF3043DCcbBE1Fa653af23151", gas: 1000000},
-            (err, contract) => {
-                if (!err) {
-                    apolloClient.mutate({
-                        variables: {txHash: contract.transactionHash, collectionId: this.props.match.params.id},
-                        mutation: MONITOR_TX
-                    }).then((response) => {
-                        console.log({response});
-                    })
-                } else {
-                    console.error({err});
-                }
-            });
+        (async () => {
+
+            // Create an instance of a Contract Factory
+            let provider = new ethers.providers.Web3Provider(window.web3.currentProvider);
+
+            let factory = new ethers.ContractFactory(abi, byte_code, provider.getSigner());
+
+            // Notice we pass in "Hello World" as the parameter to the constructor
+            let contract = await factory.deploy();
+
+            // The address the Contract WILL have once mined
+            // See: https://ropsten.etherscan.io/address/0x2bd9aaa2953f988153c8629926d22a6a5f69b14e
+            console.log(contract.address);
+            // "0x2bD9aAa2953F988153c8629926D22A6a5F69b14E"
+
+            // The transaction that was sent to the network to deploy the Contract
+            // See: https://ropsten.etherscan.io/tx/0x159b76843662a15bd67e482dcfbee55e8e44efad26c5a614245e12a00d4b1a51
+            console.log(contract.deployTransaction.hash);
+            // "0x159b76843662a15bd67e482dcfbee55e8e44efad26c5a614245e12a00d4b1a51"
+
+            // The contract is NOT deployed yet; we must wait until it is mined
+            await contract.deployed();
+            apolloClient.mutate({
+                variables: {
+                    txHash: contract.deployTransaction.hash,
+                    contractAddress: contract.address,
+                    collectionId: this.props.match.params.id
+                },
+                mutation: MONITOR_TX
+            }).then((response) => {
+                console.log({response});
+            })
+            // Done! The contract is deployed.
+        })();
+        // this.setState({decoratedContract: this.state.assistInstance.Contract(abi)},
+        //     () => {
+        //         this.state.decoratedContract.deploy({data: byte_code}).send({
+        //                 from: "0xB6E58769550608DEF3043DCcbBE1Fa653af23151",
+        //                 gas: 1500000,
+        //                 gasPrice: '30000000000000'
+        //             },
+        //             (err, transactionHash) => {
+        //                 if (!err) {
+        //                     apolloClient.mutate({
+        //                         variables: {
+        //                             txHash: transactionHash,
+        //                             collectionId: this.props.match.params.id
+        //                         },
+        //                         mutation: MONITOR_TX
+        //                     }).then((response) => {
+        //                         console.log({response});
+        //                     })
+        //                 } else {
+        //                     console.error({err});
+        //                 }
+        //             });
+        //     });
     };
 
     render = () => {
@@ -129,7 +197,7 @@ class Collection extends React.Component {
                                         <p>Deployment Status: {this.state.collection.deploymentStatus}</p>
                                         <p>Contract Address: {this.state.collection.contractAddress}</p>
                                     </div>
-                                : ""}
+                                    : ""}
 
                                 <Table className={classes.table}>
                                     <TableHead>
@@ -151,8 +219,9 @@ class Collection extends React.Component {
                                         onClick={() => history.push("/collection/" + match.params.id + "/create_new_template")}>Create
                                     New Template</Button>
                                 {this.state.collection && this.state.collection.deploymentStatus !== "CONFIRMED" ?
-                                <Button color="primary" onClick={() => this.handleDeploy()}>Deploy Collection</Button>
-                                    : "" }
+                                    <Button color="primary" onClick={() => this.handleDeploy()}>Deploy
+                                        Collection</Button>
+                                    : ""}
                             </CardFooter>
                         </Card>
                     </GridItem>

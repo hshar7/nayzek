@@ -117,16 +117,20 @@ class MintModal extends React.Component {
     };
 
     mint = () => {
+        if (this.props.template.collection.deploymentStatus !== "CONFIRMED") {
+            window.alert("Please deploy collection first.");
+            return;
+        }
         this.setState({
             decoratedContract: this.state.assistInstance.Contract(
-                this.state.web3.eth.contract(abi).at("0x1600ce19d19b9d4a39dff664271adcb6bd1bb083")
+                this.state.web3.eth.contract(abi).at(this.props.template.collection.contractAddress)
             )
         }, () => {
             this.state.decoratedContract.mintWithTokenURI(
                 "0xB6E58769550608DEF3043DCcbBE1Fa653af23151",
-                7,
+                this.props.template.id,
                 JSON.stringify({name: this.state.name, description: this.state.description}),
-                {from: "0xB6E58769550608DEF3043DCcbBE1Fa653af23151"},
+                {from: "0xB6E58769550608DEF3043DCcbBE1Fa653af23151".toLowerCase()},
                 (err, _) => {
                     if (!err) {
                         console.log("Contract successful");

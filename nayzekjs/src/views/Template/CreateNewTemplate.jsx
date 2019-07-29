@@ -11,7 +11,6 @@ import GridItem from "components/Grid/GridItem.jsx";
 import {apolloClient} from "util/index";
 import gql from "graphql-tag";
 
-const queryString = require('query-string');
 const style = {
     label: {
         marginTop: "0.9rem"

@@ -1,20 +1,17 @@
 import React from "react";
-import { withStyles } from "@material-ui/core";
+import {withStyles} from "@material-ui/core";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import Input from "@material-ui/core/Input/index";
-import FormControl from "@material-ui/core/FormControl/index";
 import MenuItem from "@material-ui/core/MenuItem/index";
 import Select from "@material-ui/core/Select/index";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
-import { InputAdornment } from "@material-ui/core";
-import CustomInput from "components/CustomInput/CustomInput";
-import { apolloClient } from "util/index";
+import {apolloClient} from "util/index";
 import gql from "graphql-tag";
 
+const queryString = require('query-string');
 const style = {
     label: {
         marginTop: "0.9rem"
@@ -43,7 +40,7 @@ class CreateNewTemplate extends React.Component {
     };
 
     handleSimple = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({[event.target.name]: event.target.value});
     };
 
     handleSubmit = (event) => {
@@ -51,16 +48,21 @@ class CreateNewTemplate extends React.Component {
 
         apolloClient
             .mutate({
-                variables: { name: this.state.name, description: this.state.description, type: this.state.type, nftCollectionId: this.props.match.params.id },
+                variables: {
+                    name: this.state.name,
+                    description: this.state.description,
+                    type: this.state.type,
+                    nftCollectionId: this.props.match.params.id
+                },
                 mutation: CREATE_NEW_TEMPLATE
             })
             .then(response => {
-                this.props.history.push("/collection/" + this.props.match.params.id + "/details")
+                this.props.history.push("/collection/" + this.props.match.params.id + "/details/?fetchPolicy=network-only")
             });
     };
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
 
         return <GridContainer>
             <GridItem xs={12}>
@@ -129,7 +131,7 @@ class CreateNewTemplate extends React.Component {
                                             value="ERC721"
                                         >
                                             ERC721
-                                    </MenuItem>
+                                        </MenuItem>
                                         <MenuItem
                                             classes={{
                                                 root: classes.selectMenuItem,
@@ -138,7 +140,7 @@ class CreateNewTemplate extends React.Component {
                                             value="ERC_1155"
                                         >
                                             ERC_1155
-                                    </MenuItem>
+                                        </MenuItem>
                                     </Select>
                                 </GridItem>
                             </GridContainer>
@@ -152,7 +154,7 @@ class CreateNewTemplate extends React.Component {
                                         block
                                     >
                                         Submit
-                                </Button>
+                                    </Button>
                                 </GridItem>
                             </GridContainer>
                         </form>

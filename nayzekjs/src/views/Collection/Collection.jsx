@@ -13,9 +13,9 @@ import abi from "contracts/ERC721/ERC721.js";
 import byte_code from "contracts/ERC721/ERC721Bc.js";
 import {ethers} from 'ethers';
 import {apolloClient} from "../../util";
-import assist from "bnc-assist";
 import Web3 from "web3";
 
+const queryString = require('query-string');
 const style = {};
 
 const GET_COLLECTION = id => gql`{
@@ -56,8 +56,8 @@ const MONITOR_TX = gql`
     }
 `;
 
-const getCollectionTemplates = (classes, history, id) => (
-    <Query query={GET_COLLECTION_TEMPLATES(id)}>
+const getCollectionTemplates = (classes, history, id, fetchPolicy) => (
+    <Query query={GET_COLLECTION_TEMPLATES(id)} fetchPolicy={fetchPolicy}>
         {({loading, error, data}) => {
             if (loading) return "Loading...";
             if (error) return `Error! ${error.message}`;
@@ -184,6 +184,9 @@ class Collection extends React.Component {
 
     render = () => {
         const {classes, history, match} = this.props;
+        const parsed = queryString.parse(this.props.location.search);
+        const fetchPolicy = parsed["fetchPolicy"] ? parsed["fetchPolicy"] : "cache-first";
+
         return (
             <div>
                 <GridContainer>
@@ -210,7 +213,7 @@ class Collection extends React.Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {getCollectionTemplates(classes, history, match.params.id)}
+                                        {getCollectionTemplates(classes, history, match.params.id, fetchPolicy)}
                                     </TableBody>
                                 </Table>
                             </CardBody>

@@ -14,6 +14,7 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import gql from "graphql-tag";
 import { Query } from "react-apollo/index";
 
+const queryString = require('query-string');
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -48,8 +49,8 @@ const GET_COLLECTIONS = gql`
   }
 `;
 
-const getMyCollections = (classes, history) => (
-  <Query query={GET_COLLECTIONS}>
+const getMyCollections = (classes, history, fetchPolicy) => (
+  <Query query={GET_COLLECTIONS} fetchPolicy={fetchPolicy}>
     {({ loading, error, data }) => {
       if (loading) return "Loading...";
       if (error) return `Error! ${error.message}`;
@@ -77,6 +78,9 @@ const getMyCollections = (classes, history) => (
 
 function MyCollections(props) {
   const { classes, history } = props;
+  const parsed = queryString.parse(props.location.search);
+  const fetchPolicy = parsed["fetchPolicy"] ? parsed["fetchPolicy"] : "cache-first";
+
   return (
     <div>
       <GridContainer>
@@ -94,7 +98,7 @@ function MyCollections(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {getMyCollections(classes, history)}
+                  {getMyCollections(classes, history, fetchPolicy)}
                 </TableBody>
               </Table>
             </CardBody>

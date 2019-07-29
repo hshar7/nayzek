@@ -3,13 +3,12 @@ import PropTypes from "prop-types";
 import { Table, TableCell, TableRow, TableBody, TableHead, withStyles } from "@material-ui/core";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
-import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
 import gql from "graphql-tag";
 import { Query } from "react-apollo/index";
 
+const queryString = require('query-string');
 const style = {};
 
 const GET_MY_TEMPLATES = gql`{
@@ -33,8 +32,8 @@ const GET_MY_TEMPLATES = gql`{
     }
 }`;
 
-const getMyTemplates = (classes, history, id) => (
-    <Query query={GET_MY_TEMPLATES}>
+const getMyTemplates = (classes, history, fetchPolicy) => (
+    <Query query={GET_MY_TEMPLATES} fetchPolicy={fetchPolicy}>
         {({ loading, error, data }) => {
             if (loading) return "Loading...";
             if (error) return `Error! ${error.message}`;
@@ -61,7 +60,9 @@ const getMyTemplates = (classes, history, id) => (
 );
 
 function Collection(props) {
-    const { classes, history, match } = props;
+    const { classes, history } = props;
+    const parsed = queryString.parse(props.location.search);
+    const fetchPolicy = parsed["fetchPolicy"] ? parsed["fetchPolicy"] : "cache-first";
 
     return (
         <div>
@@ -80,7 +81,7 @@ function Collection(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {getMyTemplates(classes, history)}
+                                    {getMyTemplates(classes, history, fetchPolicy)}
                                 </TableBody>
                             </Table>
                         </CardBody>

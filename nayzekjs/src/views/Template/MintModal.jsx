@@ -117,6 +117,7 @@ class MintModal extends React.Component {
     };
 
     mint = () => {
+        this.props.closeModal("mintModal");
         if (this.props.template.collection.deploymentStatus !== "CONFIRMED") {
             window.alert("Please deploy collection first.");
             return;

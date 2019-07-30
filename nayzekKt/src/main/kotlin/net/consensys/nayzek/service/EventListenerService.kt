@@ -38,6 +38,9 @@ class EventListenerService @Autowired constructor(
         val template = nftTemplateRepository.findOne(newTokenMessage.details.nonIndexedParameters[3].value) ?:
                 throw Exception("Template not found ${newTokenMessage.details.nonIndexedParameters[3].value}")
 
+        if (nftRepository.existsByTokenIdAndTemplate(
+                        newTokenMessage.details.nonIndexedParameters[0].value.toInt(), template)) return
+
         nftRepository.insert(Nft(
                 id = UUID.randomUUID().toString(),
                 contract = newTokenMessage.details.address,
@@ -47,7 +50,7 @@ class EventListenerService @Autowired constructor(
                 minter = minter,
                 template = template,
                 ownerAddress = newTokenMessage.details.nonIndexedParameters[1].value,
-                dataJson = newTokenMessage.details.nonIndexedParameters[3].value,
+                dataJson = newTokenMessage.details.nonIndexedParameters[2].value,
                 createdAt = Date(),
                 updatedAt = Date()
         ))

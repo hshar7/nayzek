@@ -22,14 +22,15 @@ class NftQuery @Autowired constructor(
 ) : GraphQLQueryResolver {
 
     fun getNfts(count: Int, offset: Int): Page<Nft> {
-        val user = userRepository.findOne("1") ?: userRepository.insert(User(
-                id = "1",
-                email = "1",
-                name = "1",
-                publicAddress = "1",
-                reputation = 1,
-                createdAt = Date()
-        ))
+        val user = userRepository.findByPublicAddress("0xB6E58769550608DEF3043DCcbBE1Fa653af23151")
+                ?: userRepository.insert(User(
+                        id = "2",
+                        email = "1",
+                        name = "1",
+                        publicAddress = "0xB6E58769550608DEF3043DCcbBE1Fa653af23151",
+                        reputation = 1,
+                        createdAt = Date()
+                ))
 
         val sort = Sort(Sort.Direction.DESC, "createdAt")
         return nftRepository.findByMinter(user, PageRequest.of(offset, count, sort))

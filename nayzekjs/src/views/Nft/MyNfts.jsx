@@ -3,10 +3,8 @@ import PropTypes from "prop-types";
 import { Table, TableCell, TableRow, TableBody, TableHead, withStyles } from "@material-ui/core";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
-import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
 import gql from "graphql-tag";
 import { Query } from "react-apollo/index";
 
@@ -25,10 +23,13 @@ const GET_NFTS = gql`{
         template {
             id
             name
+            collection {
+                id
+                name
+            }
         }
         ownerAddress
-        name
-        description
+        dataJson
         createdAt
         updatedAt
     }
@@ -46,7 +47,7 @@ const getNfts = (classes, history) => (
                 rows.push(
                     <TableRow key={nft.id} onClick={() => history.push("/nft/" + nft.id + "/details")}>
                         <TableCell component="th" scope="row">
-                            {nft.name}
+                            {nft.template.collection.name}
                         </TableCell>
                         <TableCell align="right">{nft.template.name}</TableCell>
                         <TableCell align="right">{nft.type}</TableCell>
@@ -75,7 +76,7 @@ function Template(props) {
                             <Table className={classes.table}>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>NFT</TableCell>
+                                        <TableCell>Collection</TableCell>
                                         <TableCell align="right">Template</TableCell>
                                         <TableCell align="right">Type</TableCell>
                                         <TableCell align="right">Minted By</TableCell>

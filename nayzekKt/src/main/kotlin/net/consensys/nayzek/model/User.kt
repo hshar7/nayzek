@@ -1,7 +1,9 @@
 package net.consensys.nayzek.model
 
+import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
+@Document("users")
 data class User (
         val id: String,
         val publicAddress: String,

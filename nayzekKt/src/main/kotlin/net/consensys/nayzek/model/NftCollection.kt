@@ -1,8 +1,10 @@
 package net.consensys.nayzek.model
 
 import org.springframework.data.mongodb.core.mapping.DBRef
+import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
+@Document("nft_collections")
 data class NftCollection (
         val id: String,
         @DBRef val owner: User,

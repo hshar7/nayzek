@@ -11,6 +11,7 @@ data class NftTemplate (
         val type: NFT_TYPE,
         @DBRef val creator: User,
         @DBRef val collection: NftCollection,
+        var imageUrl: String = "https://s3.amazonaws.com/nayzek-imgs/collection.png",
         var name: String,
         var description: String,
         val createdAt: Date,

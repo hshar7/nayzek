@@ -4,6 +4,7 @@ type NftCollection {
     owner: User!
     contractAddress: String!
     deploymentStatus: String!
+    imageUrl: String!
     description: String!
     createdAt: Date!
     updatedAt: Date!

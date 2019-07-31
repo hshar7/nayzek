@@ -11,6 +11,7 @@ data class NftCollection (
         var txHash: String = "0x0",
         var contractAddress: String = "0x0",
         var deploymentStatus: String = "NOT_DEPLOYED",
+        var imageUrl: String = "https://s3.amazonaws.com/nayzek-imgs/collection.png",
         var name: String,
         var description: String,
         val createdAt: Date,

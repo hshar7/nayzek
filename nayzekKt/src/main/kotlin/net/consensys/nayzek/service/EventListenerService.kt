@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import findOne
+import mu.KotlinLogging
 import net.consensys.nayzek.enumeration.NFT_TYPE
 import net.consensys.nayzek.model.Nft
 import net.consensys.nayzek.model.User
@@ -23,8 +24,13 @@ class EventListenerService @Autowired constructor(
         val userRepository: UserRepository,
         val nftTemplateRepository: NftTemplateRepository
 ) {
+
+    protected val log = KotlinLogging.logger {}
+
     @KafkaListener(topics = ["contract-events"], groupId = "nayzek")
     fun listen(message: String) {
+        log.info("New Event with message: $message}")
+
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val jsonAdapter: JsonAdapter<NewTokenMessage> = moshi.adapter(NewTokenMessage::class.java)
         val newTokenMessage: NewTokenMessage = jsonAdapter.fromJson(message)!!
@@ -41,7 +47,7 @@ class EventListenerService @Autowired constructor(
         if (nftRepository.existsByTokenIdAndTemplate(
                         newTokenMessage.details.nonIndexedParameters[0].value.toInt(), template)) return
 
-        nftRepository.insert(Nft(
+        val nft = nftRepository.insert(Nft(
                 id = UUID.randomUUID().toString(),
                 contract = newTokenMessage.details.address,
                 value = 0.toBigDecimal(),
@@ -54,5 +60,7 @@ class EventListenerService @Autowired constructor(
                 createdAt = Date(),
                 updatedAt = Date()
         ))
+
+        log.info("Created new NFT tokenId: ${nft.tokenId}, contract: ${nft.contract}, details: ${nft.dataJson}")
     }
 }
